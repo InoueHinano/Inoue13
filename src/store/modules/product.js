@@ -1,12 +1,14 @@
-
+ 
+import axios from "axios";
+ 
 export default {
-  namespaced: true, // モジュール名でアクセスするための設定
+  namespaced: true, 
   state: {
-    products: [
-      { id: 1, name: 'リンゴ', price: 150, quantity: 0 },
-      { id: 2, name: 'バナナ', price: 120, quantity: 0 },
-      { id: 3, name: 'みかん', price: 100, quantity: 0 }
-    ]
+    products: [],
+    data:null,
+    log:null,
+    
+    
   },
   getters: {
     totalPrice(state) {
@@ -14,7 +16,10 @@ export default {
     },
     productsInCart(state) {
       return state.products.filter(p => p.quantity > 0);
-    }
+    },
+     data(state) {
+      return state.data;
+    },
   },
   mutations: {
     addToCart(state, product) {
@@ -23,12 +28,41 @@ export default {
     },
     clearCart(state) {
       state.products.forEach(p => (p.quantity = 0));
+    },
+    setData(state, data){
+        state.data = data;
+      },
+    setProducts(state, products) {
+    state.products = products;
+  },
+    insertProducts(state,products){
+      state.log = products;
     }
+
   },
   actions: {
     async purchaseItems({ commit }) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       commit('clearCart');
-    }
-  }
+    },
+    
+
+  async fetchData({ commit }) {
+    const response = await axios.get('https://m3h-inoue-0804-hqfqcvdphpbgered.japaneast-01.azurewebsites.net/api/SELECT?');
+    const productList = response.data.List.map(item => ({
+      id: item.ID,
+      name: item.Name,
+      price: item.Price,
+      quantity: item.Quantity
+    }));
+    commit('setProducts', productList);
+    commit('setData', response.data);
+  },
+
+async insertProduct({ dispatch }, form) {
+  
+  await axios.get("https://m3h-inoue-0804-hqfqcvdphpbgered.japaneast-01.azurewebsites.net/api/INSERT", {params: form});
+  await dispatch('fetchData');
+}
+}
 }

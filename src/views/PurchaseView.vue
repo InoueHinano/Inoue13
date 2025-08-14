@@ -9,10 +9,10 @@
       <v-col cols="12" md="6" class="text-center">
         
         <!-- タイトル表示 -->
-        <h2 class="text-h5 font-weight-bold mb-4">購入ページ</h2>
+        <h2 class="text-h5 font-weight-bold mb-4">🛒 在庫管理 🛒</h2>
 
         <!-- 商品リストの説明文 -->
-        <p class="text-subtitle-1 mb-2">カートに入っている商品一覧：</p>
+        <p class="text-subtitle-1 mb-2"></p>
 
         <!-- カート内の商品を表示する Vuetify のリストコンポーネント -->
         <v-list dense class="mb-4">
@@ -24,27 +24,29 @@
             <!-- 商品名と個数を中央揃えで表示 -->
             <v-list-item-content class="text-center">
               <v-list-item-title>
-                {{ item.name }} - {{ item.quantity }}個
+                {{ item.name }} : {{ item.quantity }}本
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
 
-        <!-- 合計金額の表示 -->
-        <v-divider class="my-3"></v-divider>
-        <p class="text-subtitle-1 font-weight-bold mb-4">
-          合計金額：{{ this.$store.getters['product/totalPrice'] }}円
-        </p>
+        
 
         <!-- 購入ボタン：購入処理中はローディング表示、商品がない時は非活性 -->
         <v-btn
-          color="success"
+          color="#A3D8F6"
           @click="purchase"
           :loading="loading"
           :disabled="loading || productsInCart.length === 0"
+          class=mr-4
         >
-          購入する
+          更新
         </v-btn>
+
+        <v-btn color="#A3D8F6" to="/" tag="router-link">Homeへ戻る</v-btn>
+
+      
+        
 
         <!-- 購入完了時に表示するポップアップメッセージ -->
         <v-alert
@@ -55,7 +57,7 @@
           colored-border
           elevation="2"
         >
-          購入が完了しました！
+          更新しました！
         </v-alert>
 
       </v-col>
